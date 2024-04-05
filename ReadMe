@@ -1,0 +1,48 @@
+#Abgabe 2
+/**
+Eine For schleife zur Bestimmung des Inhalt der Sequenzen ist denke ich nicht vermeidbar. Allerdings wird meines Wissens
+nach die schnellste Methode gewählt (https://stackoverflow.com/questions/8894258/fastest-way-to-iterate-over-all-the-chars-in-a-string)
+Die Zeitkomplexität sollte bei O(n^2) ?? liegen, da zwei for Schleifen.
+
+Die Berechnungen bei DNA/RNA erfolgen alle in O(1) und sind demnach zu vernachlässigen.
+Gleiches gilt für die Nettoladung des Peptides.
+In der Berechnung für den isoelektrischen Punkt wird eine while Schleife verwendet, weshalb auch hier wieder O(n) gilt.
+Der Aufruf der Nettoladung-Funktion innerhalb der Funktion ändert daran nichts
+Ich habe testweise die Datei 'demo.fasta' mit 500 Peptid-Einträgen eingelesen und alle berechnungen durchgeführt. Die Laufzeit
+war nicht einmal 1 Sekunde (zumindest auf meinem Laptop) in der jetzigen Config.
+**/
+
+#Abgabe 3
+/**
+1a) ist der Pfad ungültig, wird eine FileNotFoundException geworfen mit dem Hinweis "No such file or directory"
+1b) Ich verwende ja einen Parser aus einem package. Dieser erfüllt von sich aus das Überprüfen der Fasta Datei.
+    Fehlende oder falsche Header werden bemängelt. Befindet sich ein fehlerhafter Eintrag zwischen zwei korrekten, wird
+    dieser beim Einlesen und Erstellen der Objekte einfach übersprungen. Was jetzt nicht Teil der Aufgabe war (glaube
+    ich zumindest), ist zu überprüfen, ob zu dem angegebenen Typen auch eine passende Sequenz enthalten ist.
+    Als Ersatz zu der FastaMalformattedException habe ich eine Exception erstellt, die den Ambiguous Typ abfängt und den
+    User über mögliche Typen informiert.
+1c) Als unchecked Exception habe ich eingeführt, dass nicht kompatible Sequenz typen abgefangen werden und dem User
+    ein Hinweis gegeben wird, welche tatsächlich akzeptabel sind. Eine fallback-Ebene wurde nicht eingebaut.
+    Die Formulierung der Aufgabe lässt vermuten, dass mehrere eingebaut werden sollen. Es sind zwei enthalten,
+    AmbiguousStringException & IllegalSequenceTypeException (beides RunTimeExceptions)
+2)  Ich habe insgesamt 4 Tests erstellt. Zum einen werden DNA, RNA und Peptid kontrolliert. Da die Berechnung einzelner
+    Werte überprüft wird, wird auch automatisch die Generierung der Objekte indirekt überprüft.
+    Weiterhin wird das Auftreten der AmbiguousStringException überprüft. Diese funktioniert tadellos.
+    Auffällig ist, dass sehr kurze Sequenzen zu schlechten Berechnungen führen. Weiterhin ist mir aufgefallen, dass die
+    RNA Berechnung häufiger fehlerhaft ist als die DNA Berechnung. Die Berechnung bei den Peptiden werden in fast allen
+    Fällen sehr accurate Werte berechnet.
+**/
+
+#Abgabe4
+/**
+1) Ausgabe der Objekte über die Konsole funktioniert einwandfrei. 
+   Es werden nicht alle Sequenzen in die Ausgabedatei geschrieben, hat vermutlich was mit dem Multi-threading zu tun?
+2) Multi-threading funktioniert einwandfrei, ist etwas umständlich geworden auf Grund des parsers. Die Fasta Datei wird
+   gesplittet und die Teile werden den executors übergeben, die parallel die Einträge bearbeiten.
+   Die threads werden über die cmd line mitgegeben oder wie gewünscht auf 3/4 gesetzt und die Logik überprüft. Ich habe
+   hier jetzt auch 1 thread erlaubt, da das Programm bei mir in dieser config am schnellsten läuft, liegt vermutlich am aufteilen
+   der Fasta Datei. Multi-threading ist hier also nicht wirklich sinnvoll, funktioniert aber zumindest.
+   Die IDs der Einträge sind weiterhin eindeutig
+Extra) Berechnungen wurden noch einmal überarbeitet und sollten jetzt besser funktionieren.
+       Die Translation von DNA zu Protein ist enthalten, wird allerdings nicht ausgeführt.
+**/
